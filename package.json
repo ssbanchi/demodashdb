@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "description": "A sample node app",
     "dependencies" : {
-      "ibm_db": "0.0.6",
+      "ibm_db": "0.0.18",
       "express": "3.x",
 	  "jade": "x"
     },
