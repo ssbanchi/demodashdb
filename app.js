@@ -8,7 +8,7 @@ var ibmdb = require('ibm_db');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
