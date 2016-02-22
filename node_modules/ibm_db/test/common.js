@@ -3,13 +3,14 @@ var odbc = require("../");
 //odbc.library = '/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc';
 //odbc.library = '/opt/sqlncli-11.0.1790.0/lib64/libsqlncli-11.0';
 
-exports.connectionString = "DRIVER={DB2 ODBC Driver};DATABASE=SAMPLE;UID=db2admin;PWD=db2admin;HOSTNAME=localhost;port=50000;PROTOCOL=TCPIP";
+//exports.connectionString = "DRIVER={DB2 ODBC Driver};DATABASE=SAMPLE;UID=db2admin;PWD=db2admin;HOSTNAME=localhost;port=50000;PROTOCOL=TCPIP";
+exports.connectionString = "";
 
-if (process.argv.length === 3) {
-  exports.connectionString = process.argv[2];
+try {
+  exports.connectionObject = require('./config.testConnectionStrings.json');
 }
-
-exports.connectionObject = {
+catch (e) {
+  exports.connectionObject = {
 	DRIVER : "{DB2 ODBC Driver}",
 	DATABASE : "SAMPLE",
 	HOSTNAME : "localhost",
@@ -17,21 +18,22 @@ exports.connectionObject = {
 	PWD : "db2admin",
 	PORT : "50000",
 	PROTOCOL : "TCPIP"
-};
-
-try {
-  exports.testConnectionStrings = require('./config.testConnectionStrings.json');
-}
-catch (e) {
-  exports.testConnectionStrings = [{ title : "DB2", connectionString : exports.connectionString }];
+  };
 }
 
-try {
-  exports.benchConnectionStrings = require('./config.benchConnectionStrings.json');
+for(key in exports.connectionObject) 
+{
+    exports.connectionString = exports.connectionString + key + "=" +
+                               exports.connectionObject[key] + ";" ;
 }
-catch (e) {
-  exports.benchConnectionStrings = [{ title : "DB2", connectionString : exports.connectionString }];
+
+if (process.argv.length === 3) {
+  exports.connectionString = process.argv[2];
 }
+
+exports.testConnectionStrings = [{ title : "DB2", 
+                        connectionString : exports.connectionString }];
+exports.benchConnectionStrings = exports.testConnectionStrings;
 
 if (process.argv.length === 3) {
   //look through the testConnectionStrings to see if there is a title that matches
